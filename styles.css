@@ -41,13 +41,6 @@ body {
     min-height: 100dvh;
     margin: 0;
     background-color: var(--page);
-    /* Heraldic lozenges and a soft royal glow, drawn in CSS. */
-    background-image:
-        radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--royal) 55%, transparent), transparent 60%),
-        radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--wine) 35%, transparent), transparent 55%),
-        linear-gradient(45deg, var(--pattern) 25%, transparent 25%, transparent 75%, var(--pattern) 75%),
-        linear-gradient(-45deg, var(--pattern) 25%, transparent 25%, transparent 75%, var(--pattern) 75%);
-    background-size: auto, auto, 48px 48px, 48px 48px;
     color: var(--ink);
     font-family: var(--text);
     line-height: 1.6;
@@ -120,10 +113,34 @@ h1 {
 
 .note { margin: 28px 0 0; color: var(--muted); font-size: 14px; }
 
-.footer { padding: 24px 0 8px; color: var(--muted); font-size: 13px; }
+.footer { padding: 24px 0 8px; color: #e7dfd2; font-size: 13px; text-shadow: 0 1px 2px rgba(0, 0, 0, .6); }
 
 .footer p { margin: 0; }
 
 @media (min-width: 720px) {
     .pillars { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Rotating card artwork behind the panel, in CSS only (the CSP allows no scripts).
+   Seven images, 8 s each with a 2 s crossfade; a still image when the visitor prefers reduced motion. */
+.backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #10213d; }
+.backdrop::after { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(8, 14, 25, .3), rgba(8, 14, 25, .5) 80%); content: ""; }
+.backdrop span { position: absolute; inset: 0; background-position: center; background-size: cover; opacity: 0; animation: backdrop-fade 56s linear infinite; }
+.backdrop span:nth-child(1) { background-image: url("/assets/art/cavalry-knight.webp"); animation-delay: -2s; }
+.backdrop span:nth-child(2) { background-image: url("/assets/art/longbow-archers.webp"); animation-delay: 6s; }
+.backdrop span:nth-child(3) { background-image: url("/assets/art/hill-castle.webp"); animation-delay: 14s; }
+.backdrop span:nth-child(4) { background-image: url("/assets/art/blacksmith-forge.webp"); animation-delay: 22s; }
+.backdrop span:nth-child(5) { background-image: url("/assets/art/battering-ram.webp"); animation-delay: 30s; }
+.backdrop span:nth-child(6) { background-image: url("/assets/art/village-militia.webp"); animation-delay: 38s; }
+.backdrop span:nth-child(7) { background-image: url("/assets/art/village-crafts.webp"); animation-delay: 46s; }
+@keyframes backdrop-fade {
+    0% { opacity: 0; }
+    3.57% { opacity: 1; }
+    14.29% { opacity: 1; }
+    17.86% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .backdrop span { animation: none; }
+    .backdrop span:nth-child(1) { opacity: 1; }
 }
