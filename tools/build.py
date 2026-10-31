@@ -1,5 +1,5 @@
 """Builds the coming-soon page in every locale from one template."""
-import html, os, sys
+import hashlib, html, os, sys
 root = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 L = [
  ("en", "en", "/", "English", {"t":"Coming soon","lang":"Language","lead":"Collectible cards from historic empires. Every copy is unique, with a serial number, an edition and a record of everyone who has owned it.","p":[("Collection","Gather cards of civilizations, troops, landmarks and buildings."),("Marketplace","Buy, sell and trade copies with other collectors."),("Strategy","Take your cards into a turn-based board game.")],"note":"The platform is in development. Check back soon.","desc":"Cards & Empires: unique collectible cards from historic empires, with a collection, a marketplace and a strategy game. Coming soon."}),
@@ -10,6 +10,10 @@ L = [
  ("ru", "ru", "/ru/", "Русский", {"t":"Скоро","lang":"Язык","lead":"Коллекционные карты исторических империй. Каждый экземпляр уникален: у него есть серийный номер, выпуск и история всех владельцев.","p":[("Коллекция","Собирайте карты цивилизаций, войск, памятников и зданий."),("Торговая площадка","Покупайте, продавайте и обменивайте экземпляры с другими коллекционерами."),("Стратегия","Используйте свои карты в пошаговой настольной игре.")],"note":"Платформа в разработке. Загляните позже.","desc":"Cards & Empires: уникальные коллекционные карты исторических империй, с коллекцией, торговой площадкой и стратегической игрой. Скоро."}),
 ]
 e = lambda s: html.escape(s, quote=True)
+# Versioned asset URLs: GitHub Pages lets browsers cache files for 10 minutes, so a changed
+# stylesheet or script gets a new address and is never mixed with an older page.
+version = lambda name: hashlib.sha256(open(os.path.join(root, name), "rb").read()).hexdigest()[:10]
+styles, script = f"/styles.css?v={version('styles.css')}", f"/lang.js?v={version('lang.js')}"
 alternates = "\n".join(f'    <link rel="alternate" hreflang="{code}" href="https://cardsandempires.com{path}">' for code, _, path, _, _ in L)
 alternates += '\n    <link rel="alternate" hreflang="x-default" href="https://cardsandempires.com/">'
 for code, slug, path, name, t in L:
@@ -32,8 +36,8 @@ for code, slug, path, name, t in L:
 {alternates}
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="stylesheet" href="/styles.css">
-    <script src="/lang.js"></script>
+    <link rel="stylesheet" href="{styles}">
+    <script src="{script}"></script>
 </head>
 <body>
     <div class="backdrop" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
