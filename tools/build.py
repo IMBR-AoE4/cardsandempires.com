@@ -26,13 +26,14 @@ for code, slug, path, name, t in L:
     <meta name="description" content="{e(t["desc"])}">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#10213d">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="canonical" href="https://cardsandempires.com{path}">
 {alternates}
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="stylesheet" href="/styles.css">
+    <script src="/lang.js"></script>
 </head>
 <body>
     <div class="backdrop" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
